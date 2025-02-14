@@ -12,13 +12,10 @@ use function Roots\view;
 class WooCommerceSubscriptions
 {
     public function __construct(
-        ViewFinder $sageFinder,
-        FileViewFinder $fileFinder,
-        ContainerContract $app
+        private ViewFinder $sageFinder,
+        private FileViewFinder $fileFinder,
+        private ContainerContract $app
     ) {
-        $this->app = $app;
-        $this->fileFinder = $fileFinder;
-        $this->sageFinder = $sageFinder;
     }
 
     /**
