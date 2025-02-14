@@ -3,9 +3,9 @@
 namespace Blavetstudio\Sage\WooCommerceSubscriptions;
 
 use Illuminate\Contracts\Container\Container as ContainerContract;
+use Illuminate\Support\Str;
 use Roots\Acorn\Sage\ViewFinder;
 use Roots\Acorn\View\FileViewFinder;
-use Illuminate\Support\Str;
 
 use function Roots\view;
 
@@ -15,17 +15,17 @@ class WooCommerceSubscriptions
         private ViewFinder $sageFinder,
         private FileViewFinder $fileFinder,
         private ContainerContract $app
-    ) {
-    }
+    ) {}
 
     /**
      * Support blade templates for the main template include.
      */
     public function templateInclude(string $template): string
     {
-        if (!$this->isWooCommerceSubscriptionsTemplate($template)) {
+        if (! $this->isWooCommerceSubscriptionsTemplate($template)) {
             return $template;
         }
+
         return $this->locateThemeTemplate($template) ?: $template;
     }
 
@@ -34,7 +34,7 @@ class WooCommerceSubscriptions
      */
     public function reviewsTemplate(string $template): string
     {
-        if (!$this->isWooCommerceSubscriptionsTemplate($template)) {
+        if (! $this->isWooCommerceSubscriptionsTemplate($template)) {
             return $template;
         }
 
@@ -49,7 +49,7 @@ class WooCommerceSubscriptions
     {
         // Locate any matching template within the theme.
         $themeTemplate = $this->locateThemeTemplate($template);
-        if (!$themeTemplate) {
+        if (! $themeTemplate) {
             return $template;
         }
 
@@ -66,7 +66,7 @@ class WooCommerceSubscriptions
         // }
 
         // Include directly unless it's a blade file.
-        if (!Str::endsWith($themeTemplate, '.blade.php')) {
+        if (! Str::endsWith($themeTemplate, '.blade.php')) {
             return $themeTemplate;
         }
 
@@ -82,7 +82,8 @@ class WooCommerceSubscriptions
     protected function getWooCommerceSubscriptionsPath(): string
     {
         // Sadly there is no constant defined for WC Subscriptions :S
-        $wc_subscriptions_path = trailingslashit(untrailingslashit(\WC_ABSPATH) . '-subscriptions');
+        $wc_subscriptions_path = trailingslashit(untrailingslashit(\WC_ABSPATH).'-subscriptions');
+
         return $wc_subscriptions_path;
     }
 
@@ -99,7 +100,8 @@ class WooCommerceSubscriptions
      */
     protected function locateThemeTemplate(string $template): string
     {
-        $themeTemplate = WC()->template_path() . str_replace($this->getWooCommerceSubscriptionsPath() . 'templates/', '', $template);
+        $themeTemplate = WC()->template_path().str_replace($this->getWooCommerceSubscriptionsPath().'templates/', '', $template);
+
         return locate_template($this->sageFinder->locate($themeTemplate));
     }
 }
